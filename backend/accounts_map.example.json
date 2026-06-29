@@ -1,0 +1,5 @@
+[
+  {"external_id": "act_1000000001", "client": "Nordic Talent AB", "monthly_budget": 8000, "platform": "meta"},
+  {"external_id": "1234567890", "client": "Aurora Studios", "monthly_budget": 5000, "platform": "google"},
+  {"external_id": "snap_55501", "client": "Helix Labs", "monthly_budget": 12000, "platform": "snapchat"}
+]

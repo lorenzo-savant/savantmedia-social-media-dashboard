@@ -1,0 +1,28 @@
+# Segreti — MAI nel repo (è ciò che ha causato la fuga su GitHub)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Node / frontend
+node_modules/
+dist/
+build/
+.next/
+
+# Sistema / editor
+.DS_Store
+*.log
+.vscode/
+.idea/
