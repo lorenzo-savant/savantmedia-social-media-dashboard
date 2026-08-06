@@ -13,6 +13,8 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@cspell/dict-it-it": "^3.1.6",
+    "@cspell/dict-sv": "^2.3.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
