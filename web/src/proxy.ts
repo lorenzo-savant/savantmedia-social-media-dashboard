@@ -18,7 +18,9 @@ import { NextResponse, type NextRequest } from "next/server";
  * in locale (`npm run dev`) non chiede nulla.
  */
 
-const REALM = 'Basic realm="Savant Ads — demo", charset="UTF-8"';
+// SOLO ASCII: i valori degli header HTTP sono Latin-1, e un carattere fuori
+// range (un trattino lungo, una å) fa lanciare il runtime → 500 al posto del 401.
+const REALM = 'Basic realm="Savant Ads demo", charset="UTF-8"';
 
 /** Confronto a tempo costante: evita di far dedurre la password un byte alla volta. */
 function safeEqual(a: string, b: string): boolean {
