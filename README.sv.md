@@ -246,8 +246,8 @@ uppdaterar raderna istället för att duplicera dem.
 
 ### Detaljer värda att känna till
 
-**Filtren ligger i webbadressen** (`?d=30&p=meta,google&c=helix-labs`), inte i
-webbläsarens minne. En länk till "Helix Labs, senaste 7 dagarna" går därför att
+**Filtren ligger i webbadressen** (`?d=30&p=meta,google&c=taktil`), inte i
+webbläsarens minne. En länk till "Taktil Analytics, senaste 7 dagarna" går därför att
 skicka vidare, bakåtknappen fungerar, och sidan renderas färdigfiltrerad på
 servern. När filtret ändras ligger den gamla vyn kvar nedtonad tills den nya är
 klar — ingen laddningsskelett som hoppar.
@@ -358,7 +358,7 @@ inte budgetpanelen vilken budget som gäller:
 ```bash
 python map_accounts.py --list                        # nuvarande koppling
 python map_accounts.py --file accounts_map.json      # allt på en gång, se *.example.json
-python map_accounts.py --account act_123 --client "Nordic Talent AB" --budget 85000
+python map_accounts.py --account act_123 --client "Vinterhamn AB" --budget 85000
 ```
 
 ---

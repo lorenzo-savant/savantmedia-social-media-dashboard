@@ -5,12 +5,12 @@ mensile) per i dati reali, così il pannello "budget per cliente" usa dati veri.
 Uso:
   python map_accounts.py --list
   python map_accounts.py --file accounts_map.json
-  python map_accounts.py --account act_123 --client "Nordic Talent AB" --budget 8000 [--platform meta]
+  python map_accounts.py --account act_123 --client "Vinterhamn AB" --budget 8000 [--platform meta]
 
 Il file JSON è una lista di oggetti, es.:
   [
-    {"external_id": "act_1000000001", "client": "Nordic Talent AB", "monthly_budget": 8000},
-    {"external_id": "123-456-7890",   "client": "Aurora Studios",   "platform": "google"}
+    {"external_id": "act_1000000001", "client": "Vinterhamn AB", "monthly_budget": 8000},
+    {"external_id": "123-456-7890",   "client": "Blomlyckan",   "platform": "google"}
   ]
 
 Nota: per Google l'external_id salvato dal connettore è in sole cifre (senza trattini).

@@ -276,7 +276,7 @@ Poi `python run_sync.py`: i dati Google entrano in `ad_metrics` e compaiono filt
 "google". Dopo il primo sync reale, collega gli account ai clienti per il budget:
 ```bash
 python map_accounts.py --list
-python map_accounts.py --account 1234567890 --client "Aurora Studios" --budget 5000
+python map_accounts.py --account 1234567890 --client "Blomlyckan" --budget 5000
 ```
 
 **Snapchat** — da fare con lo stesso pattern: una classe in

@@ -75,8 +75,8 @@ def run_seed() -> None:
     with get_conn() as conn, conn.cursor() as cur:
         cur.execute(
             "INSERT INTO clients (name, monthly_budget) VALUES "
-            "('Nordic Talent AB', 8000), ('Aurora Studios', 5000), "
-            "('Helix Labs', 12000) ON CONFLICT (name) DO NOTHING"
+            "('Vinterhamn AB', 8000), ('Blomlyckan', 5000), "
+            "('Taktil Analytics', 12000) ON CONFLICT (name) DO NOTHING"
         )
 
     platforms = ["meta", "google", "snapchat"]
@@ -111,11 +111,11 @@ def run_seed() -> None:
     # collega gli account ai clienti seed
     with get_conn() as conn, conn.cursor() as cur:
         cur.execute("UPDATE accounts SET client_id = (SELECT id FROM clients "
-                    "WHERE name='Nordic Talent AB') WHERE platform='meta'")
+                    "WHERE name='Vinterhamn AB') WHERE platform='meta'")
         cur.execute("UPDATE accounts SET client_id = (SELECT id FROM clients "
-                    "WHERE name='Aurora Studios') WHERE platform='google'")
+                    "WHERE name='Blomlyckan') WHERE platform='google'")
         cur.execute("UPDATE accounts SET client_id = (SELECT id FROM clients "
-                    "WHERE name='Helix Labs') WHERE platform='snapchat'")
+                    "WHERE name='Taktil Analytics') WHERE platform='snapchat'")
     print(f"[seed] scritte {n} righe di esempio su 3 piattaforme.")
 
 

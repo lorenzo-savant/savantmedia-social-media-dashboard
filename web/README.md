@@ -70,7 +70,7 @@ Nessun componente cambia: la forma dei dati è identica.
 ## Note di implementazione
 
 **Filtri nella URL.** Periodo, piattaforme e cliente stanno in `?d=&p=&c=`, non
-nello stato React: un link a "Helix Labs, ultimi 7 giorni" è condivisibile, il
+nello stato React: un link a "Taktil Analytics, ultimi 7 giorni" è condivisibile, il
 tasto Indietro funziona, e il render resta lato server — al browser arrivano i
 dati già filtrati invece dell'intero dataset. Durante il refetch il contenuto
 precedente resta a opacità ridotta: niente skeleton, niente salto di layout.

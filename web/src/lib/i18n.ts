@@ -16,7 +16,7 @@ const sv = {
   demoBadge: "DEMO",
   demoTitle: "Demodata",
   demoBody:
-    "Inga API-nycklar är kopplade ännu. Siffrorna nedan är genererade, men varje kolumn motsvarar ett verkligt fält i Meta-, Google- och Snapchat-API:erna. Se Datakällor för fält-för-fält-mappningen.",
+    "Inga API-nycklar är kopplade ännu. Kundnamn, kampanjer och siffror är påhittade — men varje kolumn motsvarar ett verkligt fält i Meta-, Google- och Snapchat-API:erna. Se Datakällor för fält-för-fält-mappningen.",
 
   nav: {
     overview: "Översikt",
@@ -249,7 +249,7 @@ const en: Dict = {
   demoBadge: "DEMO",
   demoTitle: "Demo data",
   demoBody:
-    "No API keys are connected yet. The numbers below are generated, but every column maps to a real field in the Meta, Google and Snapchat APIs. See Data sources for the field-by-field mapping.",
+    "No API keys are connected yet. Client names, campaigns and figures are fictional — but every column maps to a real field in the Meta, Google and Snapchat APIs. See Data sources for the field-by-field mapping.",
 
   nav: {
     overview: "Overview",

@@ -98,7 +98,7 @@ usa dati veri:
 ```bash
 python map_accounts.py --list                                  # mappatura attuale
 python map_accounts.py --file accounts_map.json                # da file (vedi *.example.json)
-python map_accounts.py --account act_123 --client "Nordic Talent AB" --budget 8000
+python map_accounts.py --account act_123 --client "Vinterhamn AB" --budget 8000
 ```
 
 ## Sync automatico (Windows)

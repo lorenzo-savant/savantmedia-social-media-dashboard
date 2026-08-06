@@ -1,7 +1,7 @@
 /**
- * I filtri vivono nella URL (?d=30&p=meta,google&c=helix-labs).
+ * I filtri vivono nella URL (?d=30&p=meta,google&c=taktil).
  *
- * Perché non nello stato React: così un link a "Helix Labs, ultimi 7 giorni" è
+ * Perché non nello stato React: così un link a "Taktil Analytics, ultimi 7 giorni" è
  * condivisibile, il tasto Indietro funziona, e il render resta lato server —
  * il payload che arriva al browser è già filtrato invece di essere l'intero
  * dataset. Su mobile è la differenza tra 40 KB e qualche MB.

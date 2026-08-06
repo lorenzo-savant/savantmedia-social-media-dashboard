@@ -18,36 +18,36 @@ export const TIMEZONE = "Europe/Stockholm";
 
 export const CLIENTS: Client[] = [
   {
-    id: "nordic-talent",
-    name: "Nordic Talent AB",
+    id: "vinterhamn",
+    name: "Vinterhamn AB",
     industry: "Rekrytering & employer branding",
     monthlyBudget: 85_000,
     revenueTracked: false,
   },
   {
-    id: "aurora-studios",
-    name: "Aurora Studios",
+    id: "blomlyckan",
+    name: "Blomlyckan",
     industry: "E-handel · hudvård",
     monthlyBudget: 62_000,
     revenueTracked: true,
   },
   {
-    id: "helix-labs",
-    name: "Helix Labs",
+    id: "taktil",
+    name: "Taktil Analytics",
     industry: "B2B SaaS",
     monthlyBudget: 140_000,
     revenueTracked: true,
   },
   {
-    id: "vasa-interior",
-    name: "Vasa Interiör",
+    id: "ekbacken",
+    name: "Ekbacken Interiör",
     industry: "E-handel · heminredning",
     monthlyBudget: 48_000,
     revenueTracked: true,
   },
   {
-    id: "klarhet-halsa",
-    name: "Klarhet Hälsa",
+    id: "varljus",
+    name: "Vårljus Vårdklinik",
     industry: "Vårdklinik · lokal lead gen",
     monthlyBudget: 36_000,
     revenueTracked: false,
@@ -56,21 +56,21 @@ export const CLIENTS: Client[] = [
 
 export const ACCOUNTS: Account[] = [
   // Meta — external_id nel formato act_… come lo restituisce la Graph API.
-  { id: "act_1042778319", platform: "meta", name: "Nordic Talent – Meta", clientId: "nordic-talent", currency: CURRENCY, timezone: TIMEZONE, attribution: "7d_click,1d_view" },
-  { id: "act_1042778452", platform: "meta", name: "Aurora Studios – Meta", clientId: "aurora-studios", currency: CURRENCY, timezone: TIMEZONE, attribution: "7d_click,1d_view" },
-  { id: "act_1042779106", platform: "meta", name: "Helix Labs – Meta", clientId: "helix-labs", currency: CURRENCY, timezone: TIMEZONE, attribution: "7d_click,1d_view" },
-  { id: "act_1042779884", platform: "meta", name: "Vasa Interiör – Meta", clientId: "vasa-interior", currency: CURRENCY, timezone: TIMEZONE, attribution: "7d_click,1d_view" },
+  { id: "act_1042778319", platform: "meta", name: "Vinterhamn – Meta", clientId: "vinterhamn", currency: CURRENCY, timezone: TIMEZONE, attribution: "7d_click,1d_view" },
+  { id: "act_1042778452", platform: "meta", name: "Blomlyckan – Meta", clientId: "blomlyckan", currency: CURRENCY, timezone: TIMEZONE, attribution: "7d_click,1d_view" },
+  { id: "act_1042779106", platform: "meta", name: "Taktil Analytics – Meta", clientId: "taktil", currency: CURRENCY, timezone: TIMEZONE, attribution: "7d_click,1d_view" },
+  { id: "act_1042779884", platform: "meta", name: "Ekbacken Interiör – Meta", clientId: "ekbacken", currency: CURRENCY, timezone: TIMEZONE, attribution: "7d_click,1d_view" },
 
   // Google Ads — customer id nel formato 123-456-7890 (nell'URL va senza trattini).
-  { id: "471-905-2288", platform: "google", name: "Nordic Talent – Google Ads", clientId: "nordic-talent", currency: CURRENCY, timezone: TIMEZONE, attribution: "data-driven" },
-  { id: "583-114-9027", platform: "google", name: "Aurora Studios – Google Ads", clientId: "aurora-studios", currency: CURRENCY, timezone: TIMEZONE, attribution: "data-driven" },
-  { id: "620-447-3351", platform: "google", name: "Helix Labs – Google Ads", clientId: "helix-labs", currency: CURRENCY, timezone: TIMEZONE, attribution: "data-driven" },
-  { id: "714-882-6045", platform: "google", name: "Vasa Interiör – Google Ads", clientId: "vasa-interior", currency: CURRENCY, timezone: TIMEZONE, attribution: "data-driven" },
-  { id: "806-233-7719", platform: "google", name: "Klarhet Hälsa – Google Ads", clientId: "klarhet-halsa", currency: CURRENCY, timezone: TIMEZONE, attribution: "data-driven" },
+  { id: "471-905-2288", platform: "google", name: "Vinterhamn – Google Ads", clientId: "vinterhamn", currency: CURRENCY, timezone: TIMEZONE, attribution: "data-driven" },
+  { id: "583-114-9027", platform: "google", name: "Blomlyckan – Google Ads", clientId: "blomlyckan", currency: CURRENCY, timezone: TIMEZONE, attribution: "data-driven" },
+  { id: "620-447-3351", platform: "google", name: "Taktil Analytics – Google Ads", clientId: "taktil", currency: CURRENCY, timezone: TIMEZONE, attribution: "data-driven" },
+  { id: "714-882-6045", platform: "google", name: "Ekbacken Interiör – Google Ads", clientId: "ekbacken", currency: CURRENCY, timezone: TIMEZONE, attribution: "data-driven" },
+  { id: "806-233-7719", platform: "google", name: "Vårljus Vårdklinik – Google Ads", clientId: "varljus", currency: CURRENCY, timezone: TIMEZONE, attribution: "data-driven" },
 
   // Snapchat
-  { id: "snap_55501", platform: "snapchat", name: "Aurora Studios – Snapchat", clientId: "aurora-studios", currency: CURRENCY, timezone: TIMEZONE, attribution: "28d_swipe,1d_view" },
-  { id: "snap_55507", platform: "snapchat", name: "Vasa Interiör – Snapchat", clientId: "vasa-interior", currency: CURRENCY, timezone: TIMEZONE, attribution: "28d_swipe,1d_view" },
+  { id: "snap_55501", platform: "snapchat", name: "Blomlyckan – Snapchat", clientId: "blomlyckan", currency: CURRENCY, timezone: TIMEZONE, attribution: "28d_swipe,1d_view" },
+  { id: "snap_55507", platform: "snapchat", name: "Ekbacken Interiör – Snapchat", clientId: "ekbacken", currency: CURRENCY, timezone: TIMEZONE, attribution: "28d_swipe,1d_view" },
 ];
 
 /**
@@ -139,13 +139,13 @@ const SNAP_BASE = {
 };
 
 export const CAMPAIGNS: CampaignSpec[] = [
-  /* ---------------------------------------------------------------- Nordic Talent
+  /* ---------------------------------------------------------------- Vinterhamn
      Rekrytering: konverteringen är en ansökan. Ingen intäkt kopplad till leadet
      → `aov: null` → ROAS visas som "–" i hela gränssnittet, aldrig som 0. */
-  ...build("act_1042778319", "nordic-talent", [
+  ...build("act_1042778319", "vinterhamn", [
     {
       ...META_BASE, accountId: "", hasVideo: false,
-      campaignName: "NTA | META | LEADS | Broad SE 25–54 | Q3-26",
+      campaignName: "VHN | META | LEADS | Broad SE 25–54 | Q3-26",
       objective: "OUTCOME_LEADS", bidStrategy: "LOWEST_COST_WITHOUT_CAP",
       conversionModel: "lead", conversionActionName: "Lead (Facebook-formulär)",
       dailyBudget: 750, dailySpend: 570,
@@ -154,7 +154,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...META_BASE, accountId: "", hasVideo: false,
-      campaignName: "NTA | META | LEADS | Lookalike 2% ansökningar | Q3-26",
+      campaignName: "VHN | META | LEADS | Lookalike 2% ansökningar | Q3-26",
       objective: "OUTCOME_LEADS", bidStrategy: "COST_CAP",
       conversionModel: "lead", conversionActionName: "Lead (Facebook-formulär)",
       dailyBudget: 600, dailySpend: 442,
@@ -163,7 +163,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...META_BASE, accountId: "", hasVideo: true,
-      campaignName: "NTA | META | AWARENESS | Employer brand – film | Q3-26",
+      campaignName: "VHN | META | AWARENESS | Employer brand – film | Q3-26",
       objective: "OUTCOME_AWARENESS", bidStrategy: "LOWEST_COST_WITHOUT_CAP",
       conversionModel: "lead", conversionActionName: "Lead (Facebook-formulär)",
       dailyBudget: 380, dailySpend: 276,
@@ -171,10 +171,10 @@ export const CAMPAIGNS: CampaignSpec[] = [
       weekend: 0.94, trend: -0.08, frequency: 2.15,
     },
   ]),
-  ...build("471-905-2288", "nordic-talent", [
+  ...build("471-905-2288", "vinterhamn", [
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "NTA | GADS | SEARCH | Varumärke | Always-on",
+      campaignName: "VHN | GADS | SEARCH | Varumärke | Always-on",
       objective: "SEARCH", channelType: "SEARCH", bidStrategy: "MAXIMIZE_CONVERSIONS",
       conversionModel: "lead", conversionActionName: "Ansökan skickad",
       dailyBudget: 220, dailySpend: 166,
@@ -183,7 +183,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "NTA | GADS | SEARCH | Jobb & karriär – generisk | Q3-26",
+      campaignName: "VHN | GADS | SEARCH | Jobb & karriär – generisk | Q3-26",
       objective: "SEARCH", channelType: "SEARCH", bidStrategy: "TARGET_CPA",
       conversionModel: "lead", conversionActionName: "Ansökan skickad",
       dailyBudget: 800, dailySpend: 589,
@@ -192,7 +192,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: true,
-      campaignName: "NTA | GADS | DEMAND_GEN | Kandidatprofiler | Q3-26",
+      campaignName: "VHN | GADS | DEMAND_GEN | Kandidatprofiler | Q3-26",
       objective: "DEMAND_GEN", channelType: "DEMAND_GEN", bidStrategy: "MAXIMIZE_CONVERSIONS",
       conversionModel: "lead", conversionActionName: "Ansökan skickad",
       dailyBudget: 300, dailySpend: 221,
@@ -201,14 +201,14 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
   ]),
 
-  /* --------------------------------------------------------------- Aurora Studios
+  /* --------------------------------------------------------------- Blomlyckan
      E-handel hudvård, snittorder ~700 kr. Här FINNS konverteringsvärde, så ROAS
      är nyckeltalet. Reels-kampanjen pausades mitt i perioden — den försvinner ur
      rapporten från den dagen, precis som i ett riktigt uttag. */
-  ...build("act_1042778452", "aurora-studios", [
+  ...build("act_1042778452", "blomlyckan", [
     {
       ...META_BASE, accountId: "", hasVideo: true,
-      campaignName: "AUR | META | SALES | Prospecting – hudvård brett | Q3-26",
+      campaignName: "BLM | META | SALES | Prospecting – hudvård brett | Q3-26",
       objective: "OUTCOME_SALES", bidStrategy: "LOWEST_COST_WITHOUT_CAP",
       conversionModel: "purchase", conversionActionName: "offsite_conversion.fb_pixel_purchase",
       dailyBudget: 640, dailySpend: 494,
@@ -217,7 +217,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...META_BASE, accountId: "", hasVideo: false,
-      campaignName: "AUR | META | SALES | Retargeting 30d – katalog | Always-on",
+      campaignName: "BLM | META | SALES | Retargeting 30d – katalog | Always-on",
       objective: "OUTCOME_SALES", bidStrategy: "COST_CAP",
       conversionModel: "purchase", conversionActionName: "offsite_conversion.fb_pixel_purchase",
       dailyBudget: 400, dailySpend: 314,
@@ -226,7 +226,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...META_BASE, accountId: "", hasVideo: true,
-      campaignName: "AUR | META | ENGAGEMENT | Reels UGC – nytt serum | Q3-26",
+      campaignName: "BLM | META | ENGAGEMENT | Reels UGC – nytt serum | Q3-26",
       objective: "OUTCOME_ENGAGEMENT", bidStrategy: "LOWEST_COST_WITHOUT_CAP",
       conversionModel: "purchase", conversionActionName: "offsite_conversion.fb_pixel_purchase",
       dailyBudget: 240, dailySpend: 171,
@@ -234,10 +234,10 @@ export const CAMPAIGNS: CampaignSpec[] = [
       weekend: 1.22, trend: -0.15, frequency: 1.9, pausedAfterDays: 62,
     },
   ]),
-  ...build("583-114-9027", "aurora-studios", [
+  ...build("583-114-9027", "blomlyckan", [
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: true,
-      campaignName: "AUR | GADS | PMAX | Hudvård – produktflöde | Always-on",
+      campaignName: "BLM | GADS | PMAX | Hudvård – produktflöde | Always-on",
       objective: "PERFORMANCE_MAX", channelType: "PERFORMANCE_MAX",
       bidStrategy: "MAXIMIZE_CONVERSION_VALUE",
       conversionModel: "purchase", conversionActionName: "Köp",
@@ -247,7 +247,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "AUR | GADS | SEARCH | Varumärke | Always-on",
+      campaignName: "BLM | GADS | SEARCH | Varumärke | Always-on",
       objective: "SEARCH", channelType: "SEARCH", bidStrategy: "TARGET_ROAS",
       conversionModel: "purchase", conversionActionName: "Köp",
       dailyBudget: 140, dailySpend: 104,
@@ -256,7 +256,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "AUR | GADS | SHOPPING | Bästsäljare | Q3-26",
+      campaignName: "BLM | GADS | SHOPPING | Bästsäljare | Q3-26",
       objective: "SHOPPING", channelType: "SHOPPING", bidStrategy: "TARGET_ROAS",
       conversionModel: "purchase", conversionActionName: "Köp",
       dailyBudget: 260, dailySpend: 187,
@@ -264,10 +264,10 @@ export const CAMPAIGNS: CampaignSpec[] = [
       weekend: 1.16, trend: 0.21, frequency: null,
     },
   ]),
-  ...build("snap_55501", "aurora-studios", [
+  ...build("snap_55501", "blomlyckan", [
     {
       ...SNAP_BASE, accountId: "", hasVideo: true,
-      campaignName: "AUR | SNAP | WEB_CONVERSION | Gen Z – hudvårdsrutin | Q3-26",
+      campaignName: "BLM | SNAP | WEB_CONVERSION | Gen Z – hudvårdsrutin | Q3-26",
       objective: "WEB_CONVERSION", bidStrategy: "AUTO_BID",
       conversionModel: "purchase", conversionActionName: "conversion_purchases",
       dailyBudget: 140, dailySpend: 95,
@@ -276,7 +276,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...SNAP_BASE, accountId: "", hasVideo: true,
-      campaignName: "AUR | SNAP | VIDEO_VIEW | Story Ads – sommarkampanj | Q3-26",
+      campaignName: "BLM | SNAP | VIDEO_VIEW | Story Ads – sommarkampanj | Q3-26",
       objective: "VIDEO_VIEW", bidStrategy: "AUTO_BID",
       conversionModel: "purchase", conversionActionName: "conversion_purchases",
       dailyBudget: 90, dailySpend: 57,
@@ -285,14 +285,14 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
   ]),
 
-  /* ------------------------------------------------------------------- Helix Labs
+  /* ------------------------------------------------------------------- Taktil Analytics
      B2B SaaS: konverteringen är en bokad demo, och kunden HAR satt ett värde på
      leadet i plattformen — därför går ROAS att räkna här men inte hos Nordic
      Talent. Tydlig helgsvacka (weekend < 0.5), som all B2B-trafik. */
-  ...build("act_1042779106", "helix-labs", [
+  ...build("act_1042779106", "taktil", [
     {
       ...META_BASE, accountId: "", hasVideo: true,
-      campaignName: "HLX | META | LEADS | ICP – IT-chefer Norden | Q3-26",
+      campaignName: "TKA | META | LEADS | ICP – IT-chefer Norden | Q3-26",
       objective: "OUTCOME_LEADS", bidStrategy: "COST_CAP",
       conversionModel: "lead", conversionActionName: "Lead (Facebook-formulär)",
       dailyBudget: 1350, dailySpend: 1100,
@@ -301,7 +301,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...META_BASE, accountId: "", hasVideo: false,
-      campaignName: "HLX | META | LEADS | Retargeting – demosida 30d | Always-on",
+      campaignName: "TKA | META | LEADS | Retargeting – demosida 30d | Always-on",
       objective: "OUTCOME_LEADS", bidStrategy: "COST_CAP",
       conversionModel: "lead", conversionActionName: "Lead (Facebook-formulär)",
       dailyBudget: 600, dailySpend: 480,
@@ -309,10 +309,10 @@ export const CAMPAIGNS: CampaignSpec[] = [
       weekend: 0.48, trend: 0.08, frequency: 4.1,
     },
   ]),
-  ...build("620-447-3351", "helix-labs", [
+  ...build("620-447-3351", "taktil", [
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "HLX | GADS | SEARCH | Varumärke | Always-on",
+      campaignName: "TKA | GADS | SEARCH | Varumärke | Always-on",
       objective: "SEARCH", channelType: "SEARCH", bidStrategy: "MAXIMIZE_CONVERSIONS",
       conversionModel: "lead", conversionActionName: "Demo bokad",
       dailyBudget: 320, dailySpend: 260,
@@ -321,7 +321,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "HLX | GADS | SEARCH | Konkurrenter | Q3-26",
+      campaignName: "TKA | GADS | SEARCH | Konkurrenter | Q3-26",
       objective: "SEARCH", channelType: "SEARCH", bidStrategy: "TARGET_CPA",
       conversionModel: "lead", conversionActionName: "Demo bokad",
       dailyBudget: 900, dailySpend: 720,
@@ -330,7 +330,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: 'HLX | GADS | SEARCH | Kategori – "workforce analytics" | Q3-26',
+      campaignName: 'TKA | GADS | SEARCH | Kategori – "workforce analytics" | Q3-26',
       objective: "SEARCH", channelType: "SEARCH", bidStrategy: "TARGET_CPA",
       conversionModel: "lead", conversionActionName: "Demo bokad",
       dailyBudget: 1750, dailySpend: 1450,
@@ -339,7 +339,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "HLX | GADS | DISPLAY | Remarketing – prissida | Always-on",
+      campaignName: "TKA | GADS | DISPLAY | Remarketing – prissida | Always-on",
       objective: "DISPLAY", channelType: "DISPLAY", bidStrategy: "TARGET_CPA",
       conversionModel: "lead", conversionActionName: "Demo bokad",
       dailyBudget: 420, dailySpend: 348,
@@ -348,7 +348,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: true,
-      campaignName: "HLX | GADS | VIDEO | YouTube – produktdemo | Q3-26",
+      campaignName: "TKA | GADS | VIDEO | YouTube – produktdemo | Q3-26",
       objective: "VIDEO", channelType: "VIDEO", bidStrategy: "MAXIMIZE_CONVERSIONS",
       conversionModel: "lead", conversionActionName: "Demo bokad",
       dailyBudget: 950, dailySpend: 800,
@@ -357,13 +357,13 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
   ]),
 
-  /* ---------------------------------------------------------------- Vasa Interiör
+  /* ---------------------------------------------------------------- Ekbacken Interiör
      Heminredning: hög snittorder (~2 500 kr) och låg konverteringsgrad — typiskt
      för dyra, övervägda köp. Helguppgång (weekend > 1), tvärtemot B2B. */
-  ...build("act_1042779884", "vasa-interior", [
+  ...build("act_1042779884", "ekbacken", [
     {
       ...META_BASE, accountId: "", hasVideo: true,
-      campaignName: "VAS | META | SALES | Prospecting – möbler brett | Q3-26",
+      campaignName: "EKB | META | SALES | Prospecting – möbler brett | Q3-26",
       objective: "OUTCOME_SALES", bidStrategy: "LOWEST_COST_WITHOUT_CAP",
       conversionModel: "purchase", conversionActionName: "offsite_conversion.fb_pixel_purchase",
       dailyBudget: 470, dailySpend: 323,
@@ -372,7 +372,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...META_BASE, accountId: "", hasVideo: false,
-      campaignName: "VAS | META | SALES | Retargeting – varukorg 14d | Always-on",
+      campaignName: "EKB | META | SALES | Retargeting – varukorg 14d | Always-on",
       objective: "OUTCOME_SALES", bidStrategy: "COST_CAP",
       conversionModel: "purchase", conversionActionName: "offsite_conversion.fb_pixel_purchase",
       dailyBudget: 260, dailySpend: 178,
@@ -380,10 +380,10 @@ export const CAMPAIGNS: CampaignSpec[] = [
       weekend: 1.09, trend: 0.07, frequency: 3.75,
     },
   ]),
-  ...build("714-882-6045", "vasa-interior", [
+  ...build("714-882-6045", "ekbacken", [
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: true,
-      campaignName: "VAS | GADS | PMAX | Heminredning – produktflöde | Always-on",
+      campaignName: "EKB | GADS | PMAX | Heminredning – produktflöde | Always-on",
       objective: "PERFORMANCE_MAX", channelType: "PERFORMANCE_MAX",
       bidStrategy: "MAXIMIZE_CONVERSION_VALUE",
       conversionModel: "purchase", conversionActionName: "Köp",
@@ -393,7 +393,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "VAS | GADS | SEARCH | Varumärke | Always-on",
+      campaignName: "EKB | GADS | SEARCH | Varumärke | Always-on",
       objective: "SEARCH", channelType: "SEARCH", bidStrategy: "TARGET_ROAS",
       conversionModel: "purchase", conversionActionName: "Köp",
       dailyBudget: 110, dailySpend: 72,
@@ -402,7 +402,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "VAS | GADS | SHOPPING | Soffor & fåtöljer | Q3-26",
+      campaignName: "EKB | GADS | SHOPPING | Soffor & fåtöljer | Q3-26",
       objective: "SHOPPING", channelType: "SHOPPING", bidStrategy: "TARGET_ROAS",
       conversionModel: "purchase", conversionActionName: "Köp",
       dailyBudget: 310, dailySpend: 210,
@@ -410,10 +410,10 @@ export const CAMPAIGNS: CampaignSpec[] = [
       weekend: 1.21, trend: 0.24, frequency: null,
     },
   ]),
-  ...build("snap_55507", "vasa-interior", [
+  ...build("snap_55507", "ekbacken", [
     {
       ...SNAP_BASE, accountId: "", hasVideo: true,
-      campaignName: "VAS | SNAP | WEB_CONVERSION | Första hemmet 21–34 | Q3-26",
+      campaignName: "EKB | SNAP | WEB_CONVERSION | Första hemmet 21–34 | Q3-26",
       objective: "WEB_CONVERSION", bidStrategy: "AUTO_BID",
       conversionModel: "purchase", conversionActionName: "conversion_purchases",
       dailyBudget: 110, dailySpend: 68,
@@ -422,13 +422,13 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
   ]),
 
-  /* --------------------------------------------------------------- Klarhet Hälsa
+  /* --------------------------------------------------------------- Vårljus Vårdklinik
      Lokal lead gen, bara Google. Konverteringen är en bokning; inget värde satt
      på åtgärden → CPA är nyckeltalet, ROAS visas som "–". */
-  ...build("806-233-7719", "klarhet-halsa", [
+  ...build("806-233-7719", "varljus", [
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "KLH | GADS | SEARCH | Varumärke | Always-on",
+      campaignName: "VLJ | GADS | SEARCH | Varumärke | Always-on",
       objective: "SEARCH", channelType: "SEARCH", bidStrategy: "MAXIMIZE_CONVERSIONS",
       conversionModel: "lead", conversionActionName: "Bokning – klinik",
       dailyBudget: 120, dailySpend: 95,
@@ -437,7 +437,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "KLH | GADS | SEARCH | Behandlingar – Stockholm | Always-on",
+      campaignName: "VLJ | GADS | SEARCH | Behandlingar – Stockholm | Always-on",
       objective: "SEARCH", channelType: "SEARCH", bidStrategy: "TARGET_CPA",
       conversionModel: "lead", conversionActionName: "Bokning – klinik",
       dailyBudget: 520, dailySpend: 420,
@@ -446,7 +446,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: false,
-      campaignName: "KLH | GADS | SEARCH | Behandlingar – Göteborg | Q3-26",
+      campaignName: "VLJ | GADS | SEARCH | Behandlingar – Göteborg | Q3-26",
       objective: "SEARCH", channelType: "SEARCH", bidStrategy: "TARGET_CPA",
       conversionModel: "lead", conversionActionName: "Bokning – klinik",
       dailyBudget: 320, dailySpend: 250,
@@ -455,7 +455,7 @@ export const CAMPAIGNS: CampaignSpec[] = [
     },
     {
       ...GOOGLE_BASE, accountId: "", hasVideo: true,
-      campaignName: "KLH | GADS | DEMAND_GEN | Hälsokontroll | Q3-26",
+      campaignName: "VLJ | GADS | DEMAND_GEN | Hälsokontroll | Q3-26",
       objective: "DEMAND_GEN", channelType: "DEMAND_GEN", bidStrategy: "MAXIMIZE_CONVERSIONS",
       conversionModel: "lead", conversionActionName: "Bokning – klinik",
       dailyBudget: 200, dailySpend: 159,
