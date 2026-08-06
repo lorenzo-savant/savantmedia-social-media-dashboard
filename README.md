@@ -36,7 +36,6 @@ piattaforma = scrivere una nuova classe connettore, niente altro cambia.
 | `backend/run_sync.ps1` · `register-sync-task.ps1` | sync notturno + registrazione in Task Scheduler |
 | `backend/api.py` | API FastAPI di sola lettura: `GET /api/metrics`, `GET /api/accounts` |
 | `web/` | **la dashboard** — Next.js 16 + Tailwind 4 + TypeScript (vedi `web/README.md`) |
-| `frontend/` · `frontend-dashboard.jsx` | prima versione Vite + React, superata da `web/` |
 
 ## Avvio della dashboard (senza database e senza chiavi)
 

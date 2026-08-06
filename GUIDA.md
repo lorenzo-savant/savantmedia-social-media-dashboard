@@ -1,5 +1,11 @@
 # Guida passo-passo — Savant Ads Dashboard
 
+> ⚠️ **Parzialmente superata.** I passi sul frontend citano `frontend/` e
+> `frontend-dashboard.jsx`, che sono stati rimossi: la dashboard attuale è
+> l'app Next.js in **`web/`** (`cd web && npm install && npm run dev`) e non
+> richiede né database né chiavi. I passi su Postgres, `.env` e backend restano
+> validi. Vedi [`README.md`](README.md) e [`README.sv.md`](README.sv.md).
+
 Dal computer vuoto alla dashboard funzionante. Segui i blocchi in ordine.
 I comandi sono per **macOS / Linux**; dove Windows cambia, è indicato con `▸ Windows`.
 

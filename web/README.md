@@ -1,7 +1,6 @@
 # Savant Ads — dashboard (Next.js)
 
 Interfaccia della dashboard: Next.js 16 (App Router) + Tailwind 4 + TypeScript.
-Sostituisce la vecchia app Vite in `../frontend/`.
 
 ```bash
 npm install

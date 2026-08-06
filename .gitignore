@@ -27,3 +27,8 @@ build/
 .vscode/
 .idea/
 .gstack/
+
+# Vercel (link locale del progetto + token OIDC scaricato dalla CLI)
+.vercel
+.env.local
+.env.*.local

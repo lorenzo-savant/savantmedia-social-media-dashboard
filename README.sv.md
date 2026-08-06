@@ -290,7 +290,6 @@ man från 7 till 30 dagar står de redan sedda siffrorna kvar.
 | `backend/map_accounts.py` | Koppla konto → kund → månadsbudget |
 | `backend/api.py` | Läs-API: `GET /api/metrics`, `GET /api/accounts` |
 | `backend/register-sync-task.ps1` | Registrerar den nattliga körningen |
-| `frontend/`, `frontend-dashboard.jsx` | Första versionen (Vite + React). Ersatt av `web/` |
 
 ---
 
