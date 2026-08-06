@@ -72,7 +72,10 @@ export function StatTile({
     <div
       className={cx(
         "flex flex-col justify-between rounded-2xl border border-hairline bg-surface p-4 shadow-[var(--shadow-card)]",
-        emphasis && "sm:col-span-2 lg:col-span-2",
+        // Il tile hero occupa l'intera riga anche su telefono: in una sola
+        // colonna il sottotitolo finiva schiacciato accanto allo sparkline e
+        // andava a capo una parola per riga.
+        emphasis && "col-span-2",
       )}
     >
       <div>
@@ -104,7 +107,7 @@ export function StatTile({
               {signedPct(delta, lang)}
             </span>
           )}
-          {sub && <div className="text-[11px] leading-snug text-balance text-ink-muted">{sub}</div>}
+          {sub && <div className="text-[11px] leading-snug text-ink-muted">{sub}</div>}
         </div>
         {spark && spark.length > 1 && (
           <div className={cx("shrink-0", emphasis ? "w-32" : "w-12 sm:w-16")}>
