@@ -1,5 +1,8 @@
 # Savant Ads Dashboard
 
+> 🇸🇪 **Den här filen på svenska (utförlig): [`README.sv.md`](README.sv.md)** — è la
+> versione da mostrare in azienda. 📨 Accessi da richiedere: [`TILL-REBECCA.md`](TILL-REBECCA.md)
+
 Reportistica pubblicitaria unificata: collega Meta, Google e Snapchat in un unico
 sistema, così non serve più il login manuale su ogni piattaforma.
 
@@ -32,10 +35,29 @@ piattaforma = scrivere una nuova classe connettore, niente altro cambia.
 | `backend/map_accounts.py` | CLI per mappare account → cliente (`--list`, `--file`, `--account`) |
 | `backend/run_sync.ps1` · `register-sync-task.ps1` | sync notturno + registrazione in Task Scheduler |
 | `backend/api.py` | API FastAPI di sola lettura: `GET /api/metrics`, `GET /api/accounts` |
-| `frontend/` | app Vite + React (Tailwind, recharts), due tab: Rapportering · Konton |
-| `frontend-dashboard.jsx` | la dashboard (UI bilingue EN/SV), sorgente di `frontend/src/App.jsx` |
+| `web/` | **la dashboard** — Next.js 16 + Tailwind 4 + TypeScript (vedi `web/README.md`) |
+| `frontend/` · `frontend-dashboard.jsx` | prima versione Vite + React, superata da `web/` |
 
-## Avvio oggi (senza ancora il token Meta)
+## Avvio della dashboard (senza database e senza chiavi)
+
+```bash
+cd web
+npm install
+npm run dev        # http://localhost:3000
+```
+
+È la modalità **demo**: nessun backend, nessuna API key, nessun Postgres. I dati
+vengono da un generatore deterministico e ogni colonna corrisponde a un campo
+reale delle tre Marketing API — la mappatura campo per campo è nella pagina
+**Datakällor** della dashboard stessa.
+
+Sei pagine: Översikt · Kampanjer (con dettaglio campagna) · Kunder · Insikter ·
+Konton · Datakällor. Interfaccia mobile-first, bilingue SV/EN, tema chiaro/scuro.
+
+La pagina **Konton** legge il `.env` e mostra quali chiavi mancano ancora per
+passare ai dati veri — solo i nomi delle variabili, mai i valori.
+
+## Avvio del backend (quando ci sono le chiavi)
 
 ```bash
 cd backend
@@ -43,29 +65,14 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp ../.env.example ../.env          # poi modifica .env
 
-# popola con dati finti e guarda la dashboard prendere forma
-python run_sync.py --seed
-```
-
-La dashboard (`frontend-dashboard.jsx`) gira da subito sui dati seed.
-
-## Vedere la dashboard sui dati del DB (API + frontend)
-
-Servono Postgres acceso, l'API e il frontend:
-
-```bash
-# 1) Backend API (terminale A) — dalla cartella backend, con la venv attiva
+python run_sync.py --seed           # popola Postgres con dati di prova
 uvicorn api:app --reload --port 8000
-
-# 2) Frontend (terminale B)
-cd frontend
-npm install        # solo la prima volta
-npm run dev        # apre http://localhost:5173
 ```
 
-Il frontend chiama `/api/metrics` (proxy Vite → `:8000` → view `ad_metrics_enriched`).
-Se l'API è spenta, la dashboard usa i dati seed incorporati (badge **testdata**); con
-l'API attiva mostra i dati reali del DB (badge **live-data**).
+Le route `web/src/app/api/*` restituiscono **lo stesso JSON** di `backend/api.py`
+(le colonne della view `ad_metrics_enriched`, in snake_case). Per passare ai dati
+del DB basta decommentare il rewrite in `web/next.config.ts`: nessuna modifica ai
+componenti.
 
 La dashboard ha **due tab**:
 - **Rapportering** — KPI, andamento spesa, budget per cliente, alert budget, tabella campagne.
