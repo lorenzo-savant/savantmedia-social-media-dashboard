@@ -1,61 +1,61 @@
 # Savant Ads — dashboard (Next.js)
 
-Interfaccia della dashboard: Next.js 16 (App Router) + Tailwind 4 + TypeScript.
+Dashboardens gränssnitt: Next.js 16 (App Router) + Tailwind 4 + TypeScript.
 
 ```bash
 npm install
 npm run dev      # http://localhost:3000
 ```
 
-Gira **senza backend e senza chiavi API**: i dati vengono da un generatore
-deterministico in `src/lib/demo/`. È la modalità pensata per la demo.
+Körs **utan backend och utan API-nycklar**: datan kommer från en deterministisk
+generator i `src/lib/demo/`. Det är läget som är tänkt för demon.
 
-## La regola del progetto
+## Projektets regel
 
-> Ogni numero mostrato deve corrispondere a un campo che si può davvero leggere
-> con una API key. Niente stime, niente metriche inventate.
+> Varje siffra som visas måste motsvara ett fält som faktiskt går att läsa
+> med en API-nyckel. Inga uppskattningar, inga påhittade mätvärden.
 
-Il contratto sta in [`src/lib/api-catalog.ts`](src/lib/api-catalog.ts) ed è
-visibile a schermo nella pagina **Datakällor**: per ogni metrica, l'endpoint, il
-nome esatto del campo e la trappola di conversione (`cost_micros` in
-micro-unità, i numeri Meta che arrivano come stringhe, `swipes` di Snapchat al
-posto di `clicks`…). La stessa pagina elenca anche ciò che le API **non** danno,
-e che quindi non è in dashboard.
+Kontraktet finns i [`src/lib/api-catalog.ts`](src/lib/api-catalog.ts) och
+syns på skärmen på sidan **Datakällor**: för varje mätvärde visas endpointen,
+fältets exakta namn och konverteringsfällan (`cost_micros` i
+mikroenheter, Metas siffror som kommer som strängar, Snapchats `swipes` i
+stället för `clicks`…). Samma sida listar också det som API:erna **inte** ger,
+och som därför inte finns i dashboarden.
 
-Tre conseguenze visibili nell'interfaccia:
+Tre synliga konsekvenser i gränssnittet:
 
-- **Il ROAS è `–`, non `0`**, quando l'azione di conversione non ha un valore
-  configurato (tipico dei lead). Zero direbbe "non ha reso niente", che è falso.
-- **Google non ha la reach** a livello campagna/giorno: la colonna resta vuota.
-  E non esiste una reach cross-platform, perché nessuna piattaforma deduplica
-  contro le altre — quindi in Översikt non c'è un totale di reach.
-- **Le ultime 4 giornate sono marcate come "in maturazione"**: con la finestra
-  7d_click di Meta le conversioni recenti continuano ad arrivare. È il motivo
-  per cui il sync notturno ri-scarica 28 giorni (`LOOKBACK_DAYS`).
+- **ROAS är `–`, inte `0`**, när konverteringshändelsen inte har något
+  konfigurerat värde (typiskt för leads). Noll skulle säga "den gav ingenting", vilket är falskt.
+- **Google har ingen räckvidd** på kampanj-/dagsnivå: kolumnen förblir tom.
+  Och det finns ingen räckvidd över plattformsgränsen, eftersom ingen plattform
+  deduplicerar mot de andra — därför finns ingen total räckvidd på Översikt.
+- **De senaste 4 dagarna markeras som "ännu inte färdigattribuerade"**: med Metas
+  7d_click-fönster fortsätter de senaste konverteringarna att komma in. Det är
+  skälet till att nattsynken hämtar om 28 dagar (`LOOKBACK_DAYS`).
 
-I rapporti (CTR, CPC, CPM, CPA, ROAS) sono sempre calcolati sulle somme del
-periodo, mai come media dei valori giornalieri.
+Kvoterna (CTR, CPC, CPM, CPA, ROAS) beräknas alltid på periodens summor,
+aldrig som ett medelvärde av dagsvärdena.
 
-## Struttura
+## Struktur
 
-| Percorso | Cosa c'è |
+| Sökväg | Vad som finns där |
 |---|---|
-| `src/app/page.tsx` | Översikt: KPI, andamento spesa, split piattaforma, pacing budget |
-| `src/app/kampanjer/` | tabella campagne + pagina di dettaglio con i breakdown |
-| `src/app/kunder/` | risultati e stato budget per cliente |
+| `src/app/page.tsx` | Översikt: KPI:er, kostnadsutveckling, plattformssplit, budgetpacing |
+| `src/app/kampanjer/` | kampanjtabell + detaljsida med breakdowns |
+| `src/app/kunder/` | resultat och budgetstatus per kund |
 | `src/app/insikter/` | breakdown per placering / enhet / ålder / kön / land |
-| `src/app/konton/` | stato connettori, credenziali mancanti, log di sync |
-| `src/app/datakallor/` | la mappatura campo → API |
+| `src/app/konton/` | status för connectors, saknade uppgifter, synklogg |
+| `src/app/datakallor/` | mappningen fält → API |
 | `src/app/api/` | `/api/metrics`, `/api/accounts`, `/api/health` |
-| `src/lib/demo/` | catalogo (clienti, account, campagne) e generatore |
-| `src/lib/aggregate.ts` | aggregazioni e metriche derivate |
-| `src/components/charts/` | grafici in SVG, senza librerie |
+| `src/lib/demo/` | katalog (kunder, konton, kampanjer) och generator |
+| `src/lib/aggregate.ts` | aggregeringar och härledda mätvärden |
+| `src/components/charts/` | diagram i SVG, utan bibliotek |
 
-## Passare ai dati veri
+## Gå över till skarp data
 
-Le route in `src/app/api/` restituiscono **lo stesso JSON** dell'API FastAPI in
-`../backend/api.py` (snake_case, le colonne della view `ad_metrics_enriched`).
-Con il backend acceso basta decommentare il rewrite in
+Routerna i `src/app/api/` returnerar **samma JSON** som FastAPI-API:et i
+`../backend/api.py` (snake_case, kolumnerna från vyn `ad_metrics_enriched`).
+Med backend igång räcker det att avkommentera rewriten i
 [`next.config.ts`](next.config.ts):
 
 ```ts
@@ -64,26 +64,26 @@ async rewrites() {
 }
 ```
 
-Nessun componente cambia: la forma dei dati è identica.
+Ingen komponent ändras: datans form är identisk.
 
-## Note di implementazione
+## Implementationsnoteringar
 
-**Filtri nella URL.** Periodo, piattaforme e cliente stanno in `?d=&p=&c=`, non
-nello stato React: un link a "Taktil Analytics, ultimi 7 giorni" è condivisibile, il
-tasto Indietro funziona, e il render resta lato server — al browser arrivano i
-dati già filtrati invece dell'intero dataset. Durante il refetch il contenuto
-precedente resta a opacità ridotta: niente skeleton, niente salto di layout.
+**Filter i URL:en.** Period, plattformar och kund ligger i `?d=&p=&c=`, inte
+i React-state: en länk till "Taktil Analytics, senaste 7 dagarna" går att dela,
+bakåtknappen fungerar, och renderingen sker fortfarande på servern — webbläsaren
+får redan filtrerad data i stället för hela datamängden. Under en refetch ligger
+det tidigare innehållet kvar med sänkt opacitet: ingen skeleton, inget layouthopp.
 
-**Grafici scritti a mano in SVG.** Nessuna libreria di charting: i colori sono
-variabili CSS, quindi il tema scuro non richiede un secondo tema per i grafici.
-La palette categorica (Meta blu, Google verde, Snapchat giallo) è stata passata
-a un validatore per separazione CVD, banda di luminosità e contrasto, in chiaro
-e in scuro. Ogni grafico ha il gemello in **tabella**, che è il canale
-accessibile obbligatorio quando il colore da solo non basta.
+**Handritade diagram i SVG.** Inget diagrambibliotek: färgerna är
+CSS-variabler, så det mörka temat kräver inget separat tema för diagrammen.
+Den kategoriska paletten (Meta blå, Google grön, Snapchat gul) har körts genom
+en validator för CVD-separation, luminansband och kontrast, i ljust
+och mörkt läge. Varje diagram har en tvilling i form av en **tabell**, som är den
+obligatoriska tillgängliga kanalen när färgen ensam inte räcker.
 
-**Lingua in un cookie.** Svedese di default, inglese col toggle. Il server rende
-già nella lingua giusta, quindi non c'è il lampo di testo inglese all'avvio.
+**Språket i en cookie.** Svenska som standard, engelska via växlaren. Servern
+renderar redan på rätt språk, så det blir ingen blink av engelsk text vid start.
 
-**Dati deterministici.** Il generatore è hash-based su `(campagna, giorno)`: i
-numeri di un giorno non dipendono dall'ampiezza della finestra selezionata, così
-passando da 7 a 30 giorni le cifre già viste non cambiano.
+**Deterministisk data.** Generatorn är hashbaserad på `(kampanj, dag)`:
+siffrorna för en dag beror inte på hur brett det valda fönstret är, så när man
+går från 7 till 30 dagar ändras inte de siffror man redan sett.

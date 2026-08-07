@@ -1,184 +1,184 @@
-# Log della sessione — build Savant Ads Dashboard
+# Sessionslogg — bygget av Savant Ads Dashboard
 
-**Data:** 2026-06-26
-**Da:** cartella vuota → sistema completo e verificato (DB → API → dashboard)
+**Datum:** 2026-06-26
+**Från:** tom mapp → komplett och verifierat system (DB → API → dashboard)
 
-Questo documento riassume la chat in cui è stato costruito il progetto: cosa è stato
-chiesto, cosa è stato fatto, le decisioni prese e le verifiche superate.
+Det här dokumentet sammanfattar chatten där projektet byggdes: vad som
+efterfrågades, vad som gjordes, vilka beslut som togs och vilka verifieringar som klarades.
 
 ---
 
-## 1. Obiettivo
+## 1. Mål
 
-Costruire l'intero progetto **Savant Ads Dashboard**: reportistica pubblicitaria
-unificata (Meta · Google · Snapchat) → Postgres → dashboard React. La cartella di
-partenza era vuota.
+Bygga hela projektet **Savant Ads Dashboard**: enad annonsrapportering
+(Meta · Google · Snapchat) → Postgres → React-dashboard. Utgångsmappen
+var tom.
 
-## 2. Input forniti durante la chat
+## 2. Underlag som lämnades under chatten
 
-L'utente ha incollato, in più messaggi, il sorgente completo dei moduli:
+Användaren klistrade in, i flera meddelanden, den kompletta källkoden för modulerna:
 
-- `frontend-dashboard.jsx` (dashboard React su dati seed)
-- `README.md` (overview + diagramma architettura)
+- `frontend-dashboard.jsx` (React-dashboard på seed-data)
+- `README.md` (översikt + arkitekturdiagram)
 - `backend/schema.sql`, `models.py`, `config.py`, `db.py`, `run_sync.py`
 - `backend/connectors/base.py`, `backend/connectors/meta.py`
 - `.gitignore`, `backend/requirements.txt`
 
-Quindi non un compito di progettazione, ma: **posare i file, colmare i buchi,
-verificare, e poi estendere** secondo le richieste successive.
+Alltså inte en designuppgift, utan: **lägga filerna på plats, fylla luckorna,
+verifiera, och sedan bygga ut** enligt de efterföljande önskemålen.
 
-## 3. Richieste, in ordine
+## 3. Önskemål, i ordning
 
-1. **"Build the whole project"** → posati tutti i file forniti + file mancanti.
-2. **"la dashboard dovrà avere lingua inglese e svedese con toggle"** → aggiunto i18n EN/SV.
-3. **"cosa bisogna fare?"** → elencati i passi rimanenti (mancava Postgres, accesso Meta).
-4. **"fai tutto tu"** → installato Postgres, creato DB, seed end-to-end, default lingua → svedese.
-5. **"si crea"** (l'endpoint API + frontend collegato) → costruiti API FastAPI + app Vite.
-6. **"crea markdown di questa chat"** → questo file.
+1. **"Build the whole project"** → alla tillhandahållna filer lades på plats + saknade filer.
+2. **"dashboarden ska ha engelska och svenska med toggle"** → i18n EN/SV lades till.
+3. **"vad behöver göras?"** → återstående steg listades (Postgres saknades, liksom Meta-åtkomst).
+4. **"gör allt du"** → Postgres installerades, DB skapades, seed end-to-end, standardspråk → svenska.
+5. **"skapa det"** (API-endpointen + ansluten frontend) → FastAPI-API + Vite-app byggdes.
+6. **"skapa en markdown av den här chatten"** → den här filen.
 
 ---
 
-## 4. Cosa è stato costruito
+## 4. Vad som byggdes
 
-### File verbatim (dall'utente)
+### Filer verbatim (från användaren)
 `README.md`, `frontend-dashboard.jsx`, `.gitignore`, `backend/requirements.txt`,
 `backend/{config,models,db,run_sync}.py`, `backend/schema.sql`,
 `backend/connectors/{base,meta}.py`.
 
-### File aggiunti per colmare i buchi
-- `.env.example` — rispecchia le variabili lette da `config.py`.
-- `backend/connectors/__init__.py` — package marker.
-- `GUIDA.md` — la guida passo-passo (salvata su richiesta).
+### Filer som lades till för att fylla luckorna
+- `.env.example` — speglar variablerna som läses av `config.py`.
+- `backend/connectors/__init__.py` — paketmarkör.
+- `GUIDA.md` — steg-för-steg-guiden (sparad på begäran).
 
-### Una deviazione approvata
-- `config.py`: aggiunto un **loader `.env` senza dipendenze** (`_load_dotenv`), perché
-  il workflow documentato `cp .env.example .env` altrimenti non avrebbe caricato nulla
-  (token Meta e cron avrebbero letto valori vuoti). `setdefault` → in produzione vince
-  il secret manager.
+### En godkänd avvikelse
+- `config.py`: en **`.env`-laddare utan beroenden** (`_load_dotenv`) lades till, eftersom
+  det dokumenterade arbetsflödet `cp .env.example .env` annars inte hade laddat något
+  (Meta-token och cron hade läst tomma värden). `setdefault` → i produktion vinner
+  secret managern.
 
-### Estensioni (richieste 2, 4, 5)
-- **i18n EN/SV** in `frontend-dashboard.jsx`: stringhe in `STRINGS`, toggle in header,
-  scelta salvata in `localStorage`, formattazione numerica per lingua (separatori,
-  decimali, spazio prima di `%`). Default → **svedese**.
-- **`backend/api.py`** — FastAPI sola lettura: `GET /api/metrics` (+ `?since=`, `/health`,
-  CORS) che serve la view `ad_metrics_enriched`.
-- **`backend/db.py`** — `fetch_enriched()` con serializzazione JSON (Decimal→float, date→ISO).
-- **`frontend/`** — app Vite + React 19 + **Tailwind v4** + recharts, proxy `/api → 127.0.0.1:8000`.
-  `src/App.jsx` = copia di `frontend-dashboard.jsx`.
-- La dashboard ora **prova l'API e fa fallback al seed** se l'API è spenta; badge
-  dinamico **live-data / testdata**.
+### Utbyggnader (önskemål 2, 4, 5)
+- **i18n EN/SV** i `frontend-dashboard.jsx`: strängar i `STRINGS`, toggle i headern,
+  valet sparas i `localStorage`, talformatering per språk (avgränsare,
+  decimaler, mellanslag före `%`). Standard → **svenska**.
+- **`backend/api.py`** — FastAPI, endast läsning: `GET /api/metrics` (+ `?since=`, `/health`,
+  CORS) som serverar vyn `ad_metrics_enriched`.
+- **`backend/db.py`** — `fetch_enriched()` med JSON-serialisering (Decimal→float, date→ISO).
+- **`frontend/`** — Vite-app + React 19 + **Tailwind v4** + recharts, proxy `/api → 127.0.0.1:8000`.
+  `src/App.jsx` = kopia av `frontend-dashboard.jsx`.
+- Dashboarden **provar nu API:et och faller tillbaka på seed-datan** om API:et är avstängt;
+  dynamisk badge **live-data / testdata**.
 
-### Struttura finale
+### Slutlig struktur
 ```
 savantmedia-meta-dashboard/
-├── .env.example   ·  .env (locale, non in git)
+├── .env.example   ·  .env (lokal, inte i git)
 ├── .gitignore  ·  README.md  ·  GUIDA.md  ·  SESSIONE.md
-├── frontend-dashboard.jsx          (sorgente dashboard, standalone)
+├── frontend-dashboard.jsx          (dashboardkälla, fristående)
 ├── backend/
 │   ├── requirements.txt  ·  config.py  ·  models.py  ·  db.py
 │   ├── schema.sql  ·  run_sync.py  ·  api.py
 │   └── connectors/  __init__.py · base.py · meta.py
-└── frontend/                       (app Vite: vite.config.js, src/App.jsx, …)
+└── frontend/                       (Vite-app: vite.config.js, src/App.jsx, …)
 ```
 
 ---
 
-## 5. Installazione Postgres (portable, senza admin)
+## 5. Postgres-installation (portabel, utan admin)
 
-La macchina non aveva Postgres (niente su `:5432`, niente `psql`, niente Docker) e la
-shell **non era admin** → l'installer a servizio avrebbe richiesto un prompt UAC.
-Scelta: **binari portable**, scriptabili e reversibili (basta cancellare la cartella).
+Maskinen hade inget Postgres (inget på `:5432`, ingen `psql`, ingen Docker) och
+skalet **kördes inte som admin** → tjänstinstalleraren hade krävt en UAC-prompt.
+Val: **portabla binärer**, skriptbara och reversibla (det räcker att radera mappen).
 
-- Scaricati i binari PostgreSQL **17.5** (~307 MB) → estratti in `C:\Users\loren\savant-postgres`.
-- `initdb` con auth **trust**, superuser = utente di sistema `loren`.
-- Server avviato su `:5432`; database `savant_ads` creato.
-- Script di comodo: `C:\Users\loren\savant-postgres\start.ps1` / `stop.ps1`.
+- PostgreSQL-binärerna **17.5** (~307 MB) laddades ner → extraherades till `C:\Users\loren\savant-postgres`.
+- `initdb` med auth **trust**, superuser = systemanvändaren `loren`.
+- Servern startades på `:5432`; databasen `savant_ads` skapades.
+- Hjälpskript: `C:\Users\loren\savant-postgres\start.ps1` / `stop.ps1`.
 
-> Limite noto: essendo portable **non riparte da solo dopo un reboot** → usare `start.ps1`.
-> Per produzione/cron: installer ufficiale come servizio.
+> Känd begränsning: eftersom den är portabel **startar den inte om av sig själv efter en omstart** → använd `start.ps1`.
+> För produktion/cron: officiell installerare som tjänst.
 
 ---
 
-## 6. Verifiche superate
+## 6. Klarade verifieringar
 
-| Verifica | Esito |
+| Verifiering | Utfall |
 |---|---|
-| `py_compile` + import smoke test (6 moduli backend) | ✅ |
-| Loader `.env` (file di prova → valori letti, poi rimosso) | ✅ `meta_is_configured=True` |
-| `frontend-dashboard.jsx` parse (esbuild) | ✅ |
-| `python run_sync.py --seed` | ✅ **360 righe** (30g × 3 piattaforme × 4 campagne) |
-| Query DB: 120 righe/piattaforma; view con ROAS + budget cliente | ✅ |
-| `db.fetch_enriched()` diretto | ✅ 360 righe, JSON corretto |
-| `GET /api/metrics` via HTTP | ✅ 360 righe (`?since=2026-06-20` → 84) |
-| `npm run build` (Tailwind + recharts + React 19) | ✅ 442 moduli |
-| **End-to-end**: `:5173/api/metrics` → proxy → FastAPI → Postgres | ✅ **360 righe** |
+| `py_compile` + smoke test av importer (6 backendmoduler) | ✅ |
+| `.env`-laddaren (testfil → värden lästes, sedan borttagen) | ✅ `meta_is_configured=True` |
+| Parsning av `frontend-dashboard.jsx` (esbuild) | ✅ |
+| `python run_sync.py --seed` | ✅ **360 rader** (30 d × 3 plattformar × 4 kampanjer) |
+| DB-fråga: 120 rader/plattform; vy med ROAS + kundbudget | ✅ |
+| `db.fetch_enriched()` direkt | ✅ 360 rader, korrekt JSON |
+| `GET /api/metrics` via HTTP | ✅ 360 rader (`?since=2026-06-20` → 84) |
+| `npm run build` (Tailwind + recharts + React 19) | ✅ 442 moduler |
+| **End-to-end**: `:5173/api/metrics` → proxy → FastAPI → Postgres | ✅ **360 rader** |
 
-Catena dimostrata:
+Demonstrerad kedja:
 ```
 browser → Vite proxy :5173/api → FastAPI :8000 → db.fetch_enriched → Postgres → ad_metrics_enriched
 ```
 
 ---
 
-## 7. Come si avvia
+## 7. Så startas systemet
 
 ```powershell
-# 0) Postgres acceso (per riavviarlo dopo un reboot)
+# 0) Postgres igång (för att starta om det efter en omstart)
 & "C:\Users\loren\savant-postgres\start.ps1"
 
-# 1) Backend API — da backend\, con la venv attiva
+# 1) Backend-API — från backend\, med venv aktiverad
 uvicorn api:app --reload --port 8000
 
-# 2) Frontend — da frontend\
+# 2) Frontend — från frontend\
 npm run dev        # http://localhost:5173  → badge "live-data"
 ```
-Con l'API spenta la dashboard usa i dati seed incorporati (badge "testdata").
+Med API:et avstängt använder dashboarden den inbyggda seed-datan (badge "testdata").
 
 ---
 
-## 8. Cosa resta (roadmap)
+## 8. Vad som återstår (roadmap)
 
-- [ ] **Meta**: in attesa dell'accesso admin di Rebecca → token + `META_AD_ACCOUNTS` nel
-      `.env`, poi `python run_sync.py` (il connettore è già pronto).
-- [ ] Mappare gli ad account reali ai clienti (`accounts.client_id`) per il pannello budget.
-- [ ] Connettore Google Ads (developer token: approvazione lenta, avviarla presto).
-- [ ] Connettore Snapchat Marketing API.
-- [ ] Scheduling notturno di `run_sync.py` (cron / Task Scheduler).
-- [ ] Alert su sforamento budget per cliente.
-
----
-
-## 9. Note di sicurezza
-
-- I segreti stanno **solo** in `.env` (ignorato da git via `.gitignore`); nessuna chiave
-  nel codice. Il token Meta dovrà essere un **System User token** (non personale).
-- In produzione: segreti in un secret manager, non in un file sul server.
+- [ ] **Meta**: väntar på Rebeccas admin-åtkomst → token + `META_AD_ACCOUNTS` i
+      `.env`, sedan `python run_sync.py` (connectorn är redan klar).
+- [ ] Mappa de riktiga annonskontona till kunderna (`accounts.client_id`) för budgetpanelen.
+- [ ] Connector för Google Ads (developer token: långsamt godkännande, starta det tidigt).
+- [ ] Connector för Snapchat Marketing API.
+- [ ] Nattlig schemaläggning av `run_sync.py` (cron / Task Scheduler).
+- [ ] Larm vid budgetöverskridande per kund.
 
 ---
 
-## 10. Handoff — completamento (Task 1–7)
+## 9. Säkerhetsnoteringar
 
-Estensioni costruite dopo il primo end-to-end, nell'ordine dell'handoff.
+- Hemligheterna ligger **endast** i `.env` (ignoreras av git via `.gitignore`); inga nycklar
+  i koden. Meta-token ska vara en **System User-token** (inte personlig).
+- I produktion: hemligheter i en secret manager, inte i en fil på servern.
 
-| Task | Cosa | Esito |
+---
+
+## 10. Handoff — slutförande (Task 1–7)
+
+Utbyggnader som byggdes efter den första end-to-end-kedjan, i handoffens ordning.
+
+| Task | Vad | Utfall |
 |---|---|---|
-| 1 | Sync robusto: `start_sync_log`/`finish_sync_log` in `db.py`; ogni connettore in try/except in `run_sync.py` | ✅ testato (un connettore in errore non ferma gli altri; righe in `sync_log`) |
-| 2 | `GET /api/accounts` + tab **Konton** (kontoöversikt) con badge stato sync; i18n EN/SV | ✅ testato (HTTP: 3 account, `?since=` filtra) |
-| 3 | Connettore **Google Ads** (`connectors/google.py`, GAQL via REST/OAuth2) + config + `.env.example` + `build_connectors()` | ✅ compile + unit-test mapping (`cost_micros`→spend, camelCase). Live: serve credenziale |
-| 4 | Mappatura account→cliente: `assign_client`/`list_account_mapping` + CLI `map_accounts.py` | ✅ testato (`--list`, assign 1/0) |
-| 5 | Sync notturno: `run_sync.ps1` (log UTF-8) + `register-sync-task.ps1` (Task Scheduler 03:00) | ✅ testato (`run_sync.ps1` exit 0, log pulito) |
-| 6 | Alert budget cliente (≥90% del mensile) nella tab Rapportering | ✅ build OK |
-| 7 | Postgres come servizio/container in produzione | ✅ documentato (README + GUIDA §10) |
+| 1 | Robust synk: `start_sync_log`/`finish_sync_log` i `db.py`; varje connector i try/except i `run_sync.py` | ✅ testad (en connector som felar stoppar inte de andra; rader i `sync_log`) |
+| 2 | `GET /api/accounts` + fliken **Konton** (kontoöversikt) med badge för synkstatus; i18n EN/SV | ✅ testad (HTTP: 3 konton, `?since=` filtrerar) |
+| 3 | Connector för **Google Ads** (`connectors/google.py`, GAQL via REST/OAuth2) + config + `.env.example` + `build_connectors()` | ✅ kompilering + enhetstest av mappningen (`cost_micros`→spend, camelCase). Skarp körning: kräver uppgifter |
+| 4 | Mappning konto→kund: `assign_client`/`list_account_mapping` + CLI `map_accounts.py` | ✅ testad (`--list`, assign 1/0) |
+| 5 | Nattlig synk: `run_sync.ps1` (UTF-8-logg) + `register-sync-task.ps1` (Task Scheduler 03:00) | ✅ testad (`run_sync.ps1` exit 0, ren logg) |
+| 6 | Budgetlarm per kund (≥90% av månadsbudgeten) i fliken Rapportering | ✅ build OK |
+| 7 | Postgres som tjänst/container i produktion | ✅ dokumenterat (README + GUIDA §10) |
 
-**Definizione di "lavoro chiuso":** punti 1, 2, 4, 5, 6 completi e verificati; punto 3
-Google pronto (manca solo valorizzare il `.env`), Meta pronto (in attesa del token di
-Rebecca). Snapchat resta da fare con lo stesso pattern.
+**Definition av "avslutat arbete":** punkterna 1, 2, 4, 5, 6 kompletta och verifierade; punkt 3
+Google klar (bara `.env` återstår att fylla i), Meta klar (väntar på Rebeccas
+token). Snapchat återstår att göra med samma mönster.
 
-### Nuovi file / modifiche principali
-- `backend/connectors/google.py` (nuovo) · `backend/map_accounts.py` (nuovo) ·
-  `backend/accounts_map.example.json` (nuovo)
-- `backend/run_sync.ps1`, `backend/register-sync-task.ps1` (nuovi)
+### Nya filer / viktigaste ändringar
+- `backend/connectors/google.py` (ny) · `backend/map_accounts.py` (ny) ·
+  `backend/accounts_map.example.json` (ny)
+- `backend/run_sync.ps1`, `backend/register-sync-task.ps1` (nya)
 - `backend/db.py` (+ sync_log, fetch_accounts, assign_client, list_account_mapping)
-- `backend/api.py` (+ `/api/accounts`) · `backend/run_sync.py` (isolamento + Google) ·
-  `backend/config.py` (+ sezione Google) · `.env.example` (+ Google)
-- `frontend-dashboard.jsx` e `frontend/src/App.jsx` (tab Rapportering/Konton + alert budget)
+- `backend/api.py` (+ `/api/accounts`) · `backend/run_sync.py` (isolering + Google) ·
+  `backend/config.py` (+ Google-sektion) · `.env.example` (+ Google)
+- `frontend-dashboard.jsx` och `frontend/src/App.jsx` (flikarna Rapportering/Konton + budgetlarm)

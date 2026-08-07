@@ -1,77 +1,76 @@
-# Guida passo-passo — Savant Ads Dashboard
+# Steg-för-steg-guide — Savant Ads Dashboard
 
-> ⚠️ **Parzialmente superata.** I passi sul frontend citano `frontend/` e
-> `frontend-dashboard.jsx`, che sono stati rimossi: la dashboard attuale è
-> l'app Next.js in **`web/`** (`cd web && npm install && npm run dev`) e non
-> richiede né database né chiavi. I passi su Postgres, `.env` e backend restano
-> validi. Vedi [`README.md`](README.md) e [`README.sv.md`](README.sv.md).
+> 💡 **Vill du bara se dashboarden?** Då räcker `cd web && npm install && npm run dev`
+> — ingen databas, inga nycklar. Den här guiden är för att sätta upp **hela** kedjan
+> med Postgres och den nattliga synken. Översikt: [`README.md`](README.md)
+> (italiensk kopia: [`README.it.md`](README.it.md)).
 
-Dal computer vuoto alla dashboard funzionante. Segui i blocchi in ordine.
-I comandi sono per **macOS / Linux**; dove Windows cambia, è indicato con `▸ Windows`.
+Från tom dator till fungerande dashboard. Följ blocken i ordning.
+Kommandona gäller **macOS / Linux**; där Windows skiljer sig anges det med `▸ Windows`.
 
-> Tempo stimato: 20–30 minuti la prima volta (escluso il download dei programmi).
-
----
-
-## Indice
-
-1. Cosa ti serve installato
-2. Preparare il progetto
-3. Creare il database Postgres
-4. Configurare il backend Python
-5. Impostare il file `.env`
-6. Popolare con dati di prova
-7. Avviare la dashboard
-8. Verificare che tutto funzioni
-9. Collegare Meta (quando hai l'accesso admin)
-10. Automatizzare il sync
-11. Aggiungere Google e Snapchat (più avanti)
-12. Checklist sicurezza
-13. Problemi comuni
+> Uppskattad tid: 20–30 minuter första gången (exklusive nedladdning av programmen).
 
 ---
 
-## 1. Cosa ti serve installato
+## Innehåll
 
-Controlla di avere questi tre programmi. Apri il terminale e verifica le versioni:
+1. Vad du behöver ha installerat
+2. Förbereda projektet
+3. Skapa Postgres-databasen
+4. Konfigurera Python-backenden
+5. Ställa in `.env`-filen
+6. Fylla på med demodata
+7. Starta dashboarden
+8. Kontrollera att allt fungerar
+9. Koppla Meta (när du har admin-åtkomst)
+10. Automatisera synken
+11. Lägga till Google och Snapchat (längre fram)
+12. Säkerhetschecklista
+13. Vanliga problem
+
+---
+
+## 1. Vad du behöver ha installerat
+
+Kontrollera att du har dessa tre program. Öppna terminalen och verifiera versionerna:
 
 ```bash
-python3 --version     # serve 3.10 o superiore
-psql --version        # PostgreSQL 14 o superiore
-node --version        # 18 o superiore (per la dashboard)
+python3 --version     # kräver 3.10 eller senare
+psql --version        # PostgreSQL 14 eller senare
+node --version        # 18 eller senare (för dashboarden)
 ```
 
-Se manca qualcosa:
+Om något saknas:
 - **Python** → python.org/downloads
-- **PostgreSQL** → postgresql.org/download (su macOS in alternativa: `brew install postgresql@16`)
-- **Node** → nodejs.org (versione LTS)
+- **PostgreSQL** → postgresql.org/download (på macOS alternativt: `brew install postgresql@16`)
+- **Node** → nodejs.org (LTS-versionen)
 
-`▸ Windows`: dopo aver installato Postgres, assicurati che `psql` sia nel PATH, oppure usa il programma "SQL Shell (psql)" dal menu Start.
+`▸ Windows`: efter att du installerat Postgres, se till att `psql` finns i PATH, eller använd programmet "SQL Shell (psql)" från Start-menyn.
 
 ---
 
-## 2. Preparare il progetto
+## 2. Förbereda projektet
 
-Metti la cartella `savant-ads-dashboard` dove preferisci e spostati dentro:
+Lägg mappen `savant-ads-dashboard` där du vill och gå in i den:
 
 ```bash
-cd ~/progetti/savant-ads-dashboard      # adatta il percorso al tuo
+cd ~/projekt/savant-ads-dashboard      # anpassa sökvägen till din
 ls
 ```
 
-Devi vedere: `backend/`, `frontend-dashboard.jsx`, `README.md`, `.env.example`, `.gitignore`.
+Du ska se: `backend/`, `frontend-dashboard.jsx`, `README.md`, `.env.example`, `.gitignore`.
 
 ---
 
-## 3. Creare il database Postgres
+## 3. Skapa Postgres-databasen
 
-Crea un database vuoto chiamato `savant_ads`:
+Skapa en tom databas med namnet `savant_ads`:
 
 ```bash
 createdb savant_ads
 ```
 
-Se `createdb` non esiste o dà errore, entra in psql e crealo a mano:
+Om `createdb` inte finns eller ger fel, gå in i psql och skapa den manuellt:
 
 ```bash
 psql postgres
@@ -81,16 +80,16 @@ CREATE DATABASE savant_ads;
 \q
 ```
 
-`▸ Windows`: apri "SQL Shell (psql)", premi Invio fino alla password, poi esegui
-`CREATE DATABASE savant_ads;` e `\q`.
+`▸ Windows`: öppna "SQL Shell (psql)", tryck Enter tills lösenordsfrågan, kör sedan
+`CREATE DATABASE savant_ads;` och `\q`.
 
-Non serve creare le tabelle a mano: ci pensa lo script al primo avvio.
+Du behöver inte skapa tabellerna manuellt: det sköter skriptet vid första körningen.
 
 ---
 
-## 4. Configurare il backend Python
+## 4. Konfigurera Python-backenden
 
-Crea un ambiente virtuale (isola le librerie del progetto) e installa le dipendenze:
+Skapa en virtuell miljö (isolerar projektets bibliotek) och installera beroendena:
 
 ```bash
 cd backend
@@ -99,55 +98,55 @@ source .venv/bin/activate            # ▸ Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Quando l'ambiente è attivo, vedi `(.venv)` all'inizio della riga del terminale.
-Da qui in poi lavora sempre con l'ambiente attivo. Per disattivarlo: `deactivate`.
+När miljön är aktiv ser du `(.venv)` i början av terminalraden.
+Arbeta hädanefter alltid med miljön aktiv. För att avaktivera den: `deactivate`.
 
 ---
 
-## 5. Impostare il file `.env`
+## 5. Ställa in `.env`-filen
 
-Copia il file di esempio e aprilo:
+Kopiera exempelfilen och öppna den:
 
 ```bash
 cp ../.env.example ../.env
 ```
 
-Apri `.env` (nella cartella principale del progetto) con un editor e controlla la riga del database.
-Se Postgres gira in locale senza password, va bene così:
+Öppna `.env` (i projektets huvudmapp) i en editor och kontrollera databasraden.
+Om Postgres kör lokalt utan lösenord fungerar det som det är:
 
 ```
 DATABASE_URL=postgresql://localhost:5432/savant_ads
 ```
 
-Se il tuo Postgres ha utente e password, usa questo formato:
+Om din Postgres har användare och lösenord, använd det här formatet:
 
 ```
-DATABASE_URL=postgresql://utente:password@localhost:5432/savant_ads
+DATABASE_URL=postgresql://användare:lösenord@localhost:5432/savant_ads
 ```
 
-I campi `META_ACCESS_TOKEN` e `META_AD_ACCOUNTS` **lasciali vuoti per ora** —
-li riempirai al passo 9 quando avrai l'accesso. Senza token, il sistema gira
-tranquillamente sui dati di prova.
+Fälten `META_ACCESS_TOKEN` och `META_AD_ACCOUNTS` **lämnar du tomma tills vidare** —
+du fyller i dem i steg 9 när du har åtkomsten. Utan token kör systemet
+utan problem på demodata.
 
-> ⚠️ Il file `.env` non va mai messo su git: è già escluso dal `.gitignore`.
+> ⚠️ Filen `.env` ska aldrig läggas på git: den är redan exkluderad via `.gitignore`.
 
 ---
 
-## 6. Popolare con dati di prova
+## 6. Fylla på med demodata
 
-Genera dati finti realistici (30 giorni, 3 piattaforme, 3 clienti):
+Generera realistisk men påhittad data (30 dagar, 3 plattformar, 3 kunder):
 
 ```bash
 python run_sync.py --seed
 ```
 
-Output atteso, qualcosa tipo:
+Förväntad output, ungefär så här:
 
 ```
 [seed] scritte 360 righe di esempio su 3 piattaforme.
 ```
 
-Se vedi questo, database e backend funzionano. Puoi controllare i dati:
+Ser du detta fungerar databas och backend. Du kan kontrollera datan:
 
 ```bash
 psql savant_ads -c "SELECT platform, count(*), round(sum(spend)) AS spesa FROM ad_metrics GROUP BY platform;"
@@ -155,172 +154,172 @@ psql savant_ads -c "SELECT platform, count(*), round(sum(spend)) AS spesa FROM a
 
 ---
 
-## 7. Avviare la dashboard
+## 7. Starta dashboarden
 
-La dashboard è il file `frontend-dashboard.jsx`. Due modi per vederla:
-
-**A) Subito, nell'anteprima** — è la stessa che hai già visto in chat: si apre
-direttamente con i dati seed incorporati, senza configurare nulla.
-
-**B) Come progetto vero (consigliato)** — l'app Vite è **già pronta** in `frontend/`
-(React + Tailwind + recharts; `frontend/src/App.jsx` è già collegato all'API). Servono
-due terminali:
+Dashboarden är Next.js-appen i `web/`. Den behöver **varken databas eller nycklar**
+för att starta — den kör på genererad demodata:
 
 ```bash
-# Terminale 1 — backend API (dalla cartella backend, con la venv attiva)
+cd web
+npm install        # endast första gången
+npm run dev        # http://localhost:3000
+```
+
+Det räcker för att se hela gränssnittet: sex vyer, svenska/engelska, ljust/mörkt läge.
+
+**Vill du se datan från databasen** i stället för demodatan, starta läs-API:et i en
+andra terminal och peka appen dit:
+
+```bash
+# Terminal 2 — backend-API (från mappen backend, med venv aktiv)
 uvicorn api:app --reload --port 8000
-
-# Terminale 2 — frontend
-cd frontend
-npm install        # solo la prima volta
-npm run dev
 ```
 
-Apri il link che compare (di solito `http://localhost:5173`). Con l'API accesa la
-dashboard mostra i **dati reali** del DB (badge **live-data**); con l'API spenta usa i
-dati seed incorporati (badge **testdata**), quindi niente pagina bianca.
+Avkommentera sedan `rewrites` i `web/next.config.ts`. Rutterna under
+`web/src/app/api/` svarar med samma JSON som `backend/api.py`, så inget i
+gränssnittet behöver ändras.
 
-> Nota: `frontend-dashboard.jsx` nella radice resta la copia "sorgente" della dashboard;
-> `frontend/src/App.jsx` ne è una copia identica. Se modifichi uno, riallinea l'altro.
+> Obs: den tidigare Vite-appen (`frontend/` och `frontend-dashboard.jsx`) är
+> borttagen ur repot. Stegen ovan är de som gäller.
 
 ---
 
-## 8. Verificare che tutto funzioni
+## 8. Kontrollera att allt fungerar
 
-Sulla dashboard devi poter:
-- vedere le sei card di KPI in alto (spesa, impression, click, conversioni, ROAS, CPA);
-- usare il toggle lingua **EN / SV** in alto a destra: l'interfaccia passa tra inglese
-  e svedese (anche i separatori dei numeri); la scelta resta salvata al ricaricamento;
-- cliccare i filtri **Meta / Google / Snapchat** e veder cambiare i numeri;
-- cambiare l'intervallo **7 / 14 / 30 giorni**;
-- vedere le barre del **budget per cliente** e la tabella delle **campagne**.
+På dashboarden ska du kunna:
+- se de sex KPI-korten högst upp (kostnad, visningar, klick, konverteringar, ROAS, CPA);
+- använda språkväxlaren **EN / SV** uppe till höger: gränssnittet växlar mellan engelska
+  och svenska (även talens avgränsare); valet sparas vid omladdning;
+- klicka på filtren **Meta / Google / Snapchat** och se siffrorna ändras;
+- byta intervallet **7 / 14 / 30 dagar**;
+- se staplarna för **budget per kund** och tabellen med **kampanjer**.
 
-Se i numeri rispondono ai filtri e la lingua cambia col toggle, il flusso dati → vista funziona.
+Om siffrorna reagerar på filtren och språket byts med växlaren fungerar flödet data → vy.
 
 ---
 
-## 9. Collegare Meta (quando hai l'accesso admin)
+## 9. Koppla Meta (när du har admin-åtkomst)
 
-Questo è il passo che oggi è bloccato in attesa di Rebecca. Quando ti ha aggiunto
-come admin/editor al Business portfolio di Savant:
+Det här är steget som i dag är blockerat i väntan på Rebecca. När hon har lagt till
+dig som admin/redaktör i Savants Business-portfölj:
 
-**9.1 — Genera il token**
-1. Vai su business.facebook.com → **Business Settings**.
-2. **Users → System Users** → seleziona (o crea) un system user.
-3. **Generate New Token** → scegli l'app `Savant Media manager` → spunta lo scope **`ads_read`**.
-4. Copia il token (lo vedi una volta sola: salvalo subito nel `.env`).
+**9.1 — Generera token**
+1. Gå till business.facebook.com → **Business Settings**.
+2. **Users → System Users** → välj (eller skapa) en system user.
+3. **Generate New Token** → välj appen `Savant Media manager` → bocka i scopet **`ads_read`**.
+4. Kopiera token (den visas bara en gång: spara den direkt i `.env`).
 
-**9.2 — Trova gli ID degli account pubblicitari**
-In Business Settings → **Accounts → Ad Accounts**: l'ID è un numero, nell'API si usa
-con il prefisso `act_` (es. `act_1234567890`).
+**9.2 — Hitta annonskontonas ID:n**
+I Business Settings → **Accounts → Ad Accounts**: ID:t är ett nummer, i API:et används det
+med prefixet `act_` (t.ex. `act_1234567890`).
 
-**9.3 — Compila il `.env`**
+**9.3 — Fyll i `.env`**
 ```
-META_ACCESS_TOKEN=EAAG...il-tuo-token...
+META_ACCESS_TOKEN=EAAG...din-token...
 META_AD_ACCOUNTS=act_1234567890,act_9876543210
 ```
 
-**9.4 — Test rapido** (verifica che il token legga i dati, prima del sync completo):
+**9.4 — Snabbtest** (kontrollera att token kan läsa data, innan den fullständiga synken):
 ```bash
 curl -G "https://graph.facebook.com/v25.0/act_1234567890/insights" \
   -d "fields=campaign_name,spend,impressions,clicks" \
   -d "date_preset=last_7d" -d "level=campaign" \
-  -d "access_token=IL_TUO_TOKEN"
+  -d "access_token=DIN_TOKEN"
 ```
-Se torna un JSON con le campagne, sei pronto.
+Kommer det tillbaka en JSON med kampanjerna är du redo.
 
-**9.5 — Lancia il sync reale** (senza `--seed`):
+**9.5 — Kör den skarpa synken** (utan `--seed`):
 ```bash
 cd backend && source .venv/bin/activate
 python run_sync.py
 ```
-I dati veri di Meta entrano in `ad_metrics`. La dashboard non cambia: legge le
-stesse colonne, quindi mostrerà i numeri reali al posto del seed.
+Metas skarpa data hamnar i `ad_metrics`. Dashboarden ändras inte: den läser
+samma kolumner och visar därför de riktiga siffrorna i stället för seed-datan.
 
 ---
 
-## 10. Automatizzare il sync
+## 10. Automatisera synken
 
-Per non lanciarlo a mano ogni giorno, schedula `run_sync.py` ogni notte.
+För att slippa köra den manuellt varje dag, schemalägg `run_sync.py` varje natt.
 
-**Con cron (macOS / Linux)** — esegui `crontab -e` e aggiungi (ogni notte alle 03:00):
+**Med cron (macOS / Linux)** — kör `crontab -e` och lägg till (varje natt kl. 03:00):
 ```
-0 3 * * * cd /percorso/savant-ads-dashboard/backend && .venv/bin/python run_sync.py >> sync.log 2>&1
+0 3 * * * cd /sökväg/savant-ads-dashboard/backend && .venv/bin/python run_sync.py >> sync.log 2>&1
 ```
 
-`▸ Windows`: è già pronto. Registra il task notturno (una volta sola):
+`▸ Windows`: allt är redan klart. Registrera det nattliga tasket (bara en gång):
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File backend\register-sync-task.ps1
 ```
-Crea il task **SavantAdsSync** (giornaliero, 03:00) che lancia `backend\run_sync.ps1`
-(attiva la venv, esegue `run_sync.py`, logga in `backend\sync.log`). Per rimuoverlo:
+Det skapar tasket **SavantAdsSync** (dagligen, 03:00) som kör `backend\run_sync.ps1`
+(aktiverar venv, kör `run_sync.py`, loggar till `backend\sync.log`). För att ta bort det:
 `Unregister-ScheduledTask -TaskName SavantAdsSync -Confirm:$false`.
 
-Il sync è incrementale: ogni notte ri-scarica solo gli ultimi 28 giorni (la finestra
-di attribuzione di Meta) e aggiorna le righe esistenti, senza duplicare. Ogni connettore
-gira **isolato**: un errore su una piattaforma non ferma le altre, e l'esito (success/error)
-finisce in `sync_log` (visibile nella tab **Konton** della dashboard).
+Synken är inkrementell: varje natt hämtas bara de senaste 28 dagarna om igen (Metas
+attributionsfönster) och befintliga rader uppdateras, utan dubbletter. Varje connector
+körs **isolerat**: ett fel på en plattform stoppar inte de andra, och utfallet (success/error)
+hamnar i `sync_log` (syns i fliken **Konton** på dashboarden).
 
-> **Prerequisito Postgres.** Quello portable usato in locale **non riparte dopo un
-> reboot**, quindi il task notturno lo presuppone già acceso. In produzione installa
-> PostgreSQL con l'**installer ufficiale come servizio** (riparte al boot) o un
-> **container** con volume persistente; mantieni lo stesso `DATABASE_URL`. In locale,
-> in alternativa, avvia `C:\Users\loren\savant-postgres\start.ps1` all'accensione.
+> **Förutsättning: Postgres.** Den portabla som används lokalt **startar inte om efter en
+> reboot**, så det nattliga tasket förutsätter att den redan är igång. I produktion, installera
+> PostgreSQL med den **officiella installern som tjänst** (startar om vid boot) eller som
+> **container** med persistent volym; behåll samma `DATABASE_URL`. Lokalt kan du alternativt
+> köra `C:\Users\loren\savant-postgres\start.ps1` vid uppstart.
 
 ---
 
-## 11. Google (già pronto) e Snapchat (più avanti)
+## 11. Google (redan klart) och Snapchat (längre fram)
 
-**Google Ads** — il connettore (`backend/connectors/google.py`) **è già scritto**. Serve
-solo valorizzare le credenziali nel `.env` (Explorer Access è immediato, niente attesa):
+**Google Ads** — connectorn (`backend/connectors/google.py`) **är redan skriven**. Det enda
+som behövs är att fylla i uppgifterna i `.env` (Explorer Access ges direkt, ingen väntan):
 ```
 GOOGLE_DEVELOPER_TOKEN=...   GOOGLE_CLIENT_ID=...   GOOGLE_CLIENT_SECRET=...
 GOOGLE_REFRESH_TOKEN=...     GOOGLE_CUSTOMER_IDS=123-456-7890
-# GOOGLE_LOGIN_CUSTOMER_ID=...  (manager/MCC, opzionale)
+# GOOGLE_LOGIN_CUSTOMER_ID=...  (förvaltarkonto/MCC, valfritt)
 ```
-Poi `python run_sync.py`: i dati Google entrano in `ad_metrics` e compaiono filtrando su
-"google". Dopo il primo sync reale, collega gli account ai clienti per il budget:
+Kör sedan `python run_sync.py`: Google-datan hamnar i `ad_metrics` och dyker upp när du
+filtrerar på "google". Efter den första skarpa synken, koppla kontona till kunderna för budgeten:
 ```bash
 python map_accounts.py --list
 python map_accounts.py --account 1234567890 --client "Blomlyckan" --budget 5000
 ```
 
-**Snapchat** — da fare con lo stesso pattern: una classe in
-`backend/connectors/snapchat.py` che eredita da `BaseConnector`, implementa `fetch()`
-e ritorna `list[MetricRow]`; poi aggiungila a `run_sync.py → build_connectors()`.
-DB e dashboard non si toccano.
+**Snapchat** — görs enligt samma mönster: en klass i
+`backend/connectors/snapchat.py` som ärver från `BaseConnector`, implementerar `fetch()`
+och returnerar `list[MetricRow]`; lägg sedan till den i `run_sync.py → build_connectors()`.
+Databas och dashboard rörs inte.
 
 ---
 
-## 12. Checklist sicurezza
+## 12. Säkerhetschecklista
 
-Da rispettare sempre (copre il punto #3 di Rebecca):
-- [ ] `.env` è elencato nel `.gitignore` e **non** compare in `git status`.
-- [ ] Nessun token o chiave è scritto dentro i file `.py`.
-- [ ] Il token Meta è un **System User token** (non personale), così non si rompe
-      se cambia la persona.
-- [ ] In produzione, i segreti stanno in un secret manager, non in un file sul server.
+Ska alltid följas (täcker Rebeccas punkt #3):
+- [ ] `.env` finns med i `.gitignore` och syns **inte** i `git status`.
+- [ ] Ingen token eller nyckel är skriven direkt i `.py`-filerna.
+- [ ] Meta-token är en **System User-token** (inte personlig), så den slutar inte
+      fungera om personen byts ut.
+- [ ] I produktion ligger hemligheterna i en secret manager, inte i en fil på servern.
 
-Verifica veloce che nessun segreto sia tracciato da git:
+Snabb kontroll att inga hemligheter spåras av git:
 ```bash
-git status --ignored | grep .env      # .env deve risultare "ignored"
+git status --ignored | grep .env      # .env ska visas som "ignored"
 ```
 
 ---
 
-## 13. Problemi comuni
+## 13. Vanliga problem
 
-| Sintomo | Causa probabile | Soluzione |
+| Symtom | Trolig orsak | Lösning |
 |---|---|---|
-| `could not connect to server` | Postgres non avviato | Avvia Postgres (`brew services start postgresql@16` o dal pannello servizi) |
-| `database "savant_ads" does not exist` | DB non creato | Rifai il passo 3 |
-| `ModuleNotFoundError: psycopg2` | Ambiente virtuale non attivo | `source .venv/bin/activate` e reinstalla i requirements |
-| `Meta non configurato — lo salto` | Token vuoto nel `.env` | Normale finché non hai l'accesso; usa `--seed` |
-| Errore Meta `code 17` | Rate limit raggiunto | Il connettore riprova da solo con attesa; aspetta il reset |
-| Errore Meta `code 190` | Token scaduto/non valido | Rigenera il System User token (passo 9.1) |
-| La dashboard è vuota | Nessun dato nel DB | Lancia `python run_sync.py --seed` |
+| `could not connect to server` | Postgres är inte startad | Starta Postgres (`brew services start postgresql@16` eller från tjänstepanelen) |
+| `database "savant_ads" does not exist` | Databasen är inte skapad | Gör om steg 3 |
+| `ModuleNotFoundError: psycopg2` | Virtuella miljön är inte aktiv | `source .venv/bin/activate` och installera om requirements |
+| `Meta non configurato — lo salto` | Tom token i `.env` | Normalt tills du har åtkomsten; använd `--seed` |
+| Meta-fel `code 17` | Rate limit har nåtts | Connectorn försöker igen själv med väntetid; invänta återställningen |
+| Meta-fel `code 190` | Utgången/ogiltig token | Generera om System User-token (steg 9.1) |
+| Dashboarden är tom | Ingen data i databasen | Kör `python run_sync.py --seed` |
 
 ---
 
-Se ti blocchi su un passo, segnami il messaggio d'errore esatto e il numero del
-passo: si risolve in fretta.
+Fastnar du på ett steg, skicka det exakta felmeddelandet och stegets nummer:
+det löser sig snabbt.

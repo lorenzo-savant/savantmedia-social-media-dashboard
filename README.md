@@ -1,6 +1,6 @@
 # Savant Ads — enad annonsrapportering
 
-> 🇮🇹 Denna fil på italienska: [`README.md`](README.md) · 📨 Vad som behövs för skarp data: [`TILL-REBECCA.md`](TILL-REBECCA.md)
+> 🇮🇹 Denna fil på italienska: [`README.it.md`](README.it.md) · 📨 Vad som behövs för skarp data: [`TILL-REBECCA.md`](TILL-REBECCA.md)
 
 Meta, Google Ads och Snapchat i **en enda vy**. Ingen manuell inloggning på tre
 plattformar, ingen export till Excel, inga siffror som inte går att lita på.
@@ -471,7 +471,8 @@ skriver ut den (`http://localhost:3001`). Inget behöver göras.
 miljövariabler som saknas per plattform. Är alla satta, titta i
 `backend\sync.log` och i tabellen `sync_log`.
 
-**`Variabel d'ambiente mancante`** vid start av backend. `.env` saknas eller är
+**`Variabile d'ambiente mancante`** vid start av backend (meddelandet kommer
+från `backend/config.py` och är på italienska). `.env` saknas eller är
 tom. Kopiera `.env.example` och fyll i.
 
 **Meta svarar med felkod 17.** Rate limit — Metas kvot baseras på kontots

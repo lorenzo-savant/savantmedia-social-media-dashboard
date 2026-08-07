@@ -1,7 +1,6 @@
 # Savant Ads Dashboard
 
-> 🇸🇪 **Den här filen på svenska (utförlig): [`README.sv.md`](README.sv.md)** — è la
-> versione da mostrare in azienda. 📨 Accessi da richiedere: [`TILL-REBECCA.md`](TILL-REBECCA.md)
+> 🇸🇪 Versione principale su GitHub (svedese): [`README.md`](README.md). 📨 Accessi da richiedere: [`TILL-REBECCA.md`](TILL-REBECCA.md)
 
 Reportistica pubblicitaria unificata: collega Meta, Google e Snapchat in un unico
 sistema, così non serve più il login manuale su ogni piattaforma.
